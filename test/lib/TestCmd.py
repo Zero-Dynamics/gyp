@@ -433,7 +433,7 @@ def match_re(lines = None, res = None):
         s = "^" + res[i] + "$"
         try:
             expr = re.compile(s)
-        except re.error, e:
+        except re.error as e:
             msg = "Regular expression error in %s: %s"
             raise re.error, msg % (repr(s), e[0])
         if not expr.search(lines[i]):
@@ -450,7 +450,7 @@ def match_re_dotall(lines = None, res = None):
     s = "^" + res + "$"
     try:
         expr = re.compile(s, re.DOTALL)
-    except re.error, e:
+    except re.error as e:
         msg = "Regular expression error in %s: %s"
         raise re.error, msg % (repr(s), e[0])
     if expr.match(lines):
@@ -506,7 +506,7 @@ def diff_re(a, b, fromfile='', tofile='',
         s = "^" + aline + "$"
         try:
             expr = re.compile(s)
-        except re.error, e:
+        except re.error as e:
             msg = "Regular expression error in %s: %s"
             raise re.error, msg % (repr(s), e[0])
         if not expr.search(bline):

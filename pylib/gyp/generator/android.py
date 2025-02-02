@@ -955,7 +955,7 @@ def PerformBuild(data, configurations, params):
   env = dict(os.environ)
   env['ONE_SHOT_MAKEFILE'] = makefile
   arguments = ['make', '-C', os.environ['ANDROID_BUILD_TOP'], 'gyp_all_modules']
-  print 'Building: %s' % arguments
+  print('Building: %s' % arguments)
   subprocess.check_call(arguments, env=env)
 
 
