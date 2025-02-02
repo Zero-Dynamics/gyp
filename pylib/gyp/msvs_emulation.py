@@ -940,14 +940,11 @@ def _ExtractImportantEnvironment(output_of_set):
   for line in output_of_set.splitlines():
     for envvar in envvars_to_save:
       if re.match(envvar + '=', line.lower()):
-        var, setting = line.split('=', 1)
-        if envvar == 'path':
-          # Our own rules (for running gyp-win-tool) and other actions in
-          # Chromium rely on python being in the path. Add the path to this
-          # python here so that if it's not in the path when ninja is run
-          # later, python will still be found.
-          setting = os.path.dirname(sys.executable) + os.pathsep + setting
-        env[var.upper()] = setting
+          var, setting = line.split('=', 1)
+          if envvar == 'path':
+              python_path = os.path.dirname(sys.executable)
+              setting = python_path + os.pathsep + setting
+          os.environ[var] = setting
         break
   for required in ('SYSTEMROOT', 'TEMP', 'TMP'):
     if required not in env:

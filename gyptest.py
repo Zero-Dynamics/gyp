@@ -174,9 +174,11 @@ def main(argv=None):
     os.chdir(opts.chdir)
 
   if opts.path:
+    if isinstance(opts.path, str):
+      opts.path = [opts.path]
     extra_path = [os.path.abspath(p) for p in opts.path]
     extra_path = os.pathsep.join(extra_path)
-    os.environ['PATH'] = extra_path + os.pathsep + os.environ['PATH']
+    os.environ['PATH'] = extra_path + os.pathsep + os.environ.get('PATH', '')
 
   if not args:
     if not opts.all:

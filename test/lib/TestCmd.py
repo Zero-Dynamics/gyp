@@ -230,7 +230,7 @@ import tempfile
 import time
 import traceback
 import types
-import UserList
+from collections import UserList
 
 __all__ = [
     'diff_re',
@@ -250,8 +250,8 @@ except ImportError:
     __all__.append('simple_diff')
 
 def is_List(e):
-    return type(e) is types.ListType \
-        or isinstance(e, UserList.UserList)
+    return isinstance(e, list) \
+        or isinstance(e, UserList)
 
 try:
     from UserString import UserString
@@ -266,7 +266,7 @@ if hasattr(types, 'UnicodeType'):
             or isinstance(e, UserString)
 else:
     def is_String(e):
-        return type(e) is types.StringType or isinstance(e, UserString)
+        return isinstance(e, str) or isinstance(e, UserString)
 
 tempfile.template = 'testcmd.'
 if os.name in ('posix', 'nt'):
@@ -282,7 +282,7 @@ _chain_to_exitfunc = None
 
 def _clean():
     global _Cleanup
-    cleanlist = filter(None, _Cleanup)
+    cleanlist = list(filter(None, _Cleanup))
     del _Cleanup[:]
     cleanlist.reverse()
     for test in cleanlist:
@@ -435,7 +435,7 @@ def match_re(lines = None, res = None):
             expr = re.compile(s)
         except re.error as e:
             msg = "Regular expression error in %s: %s"
-            raise re.error, msg % (repr(s), e[0])
+            raise re.error(msg % (repr(s), e[0]))
         if not expr.search(lines[i]):
             return
     return 1
@@ -452,7 +452,7 @@ def match_re_dotall(lines = None, res = None):
         expr = re.compile(s, re.DOTALL)
     except re.error as e:
         msg = "Regular expression error in %s: %s"
-        raise re.error, msg % (repr(s), e[0])
+        raise re.error(msg % (repr(s), e[0]))
     if expr.match(lines):
         return 1
 
@@ -508,7 +508,7 @@ def diff_re(a, b, fromfile='', tofile='',
             expr = re.compile(s)
         except re.error as e:
             msg = "Regular expression error in %s: %s"
-            raise re.error, msg % (repr(s), e[0])
+            raise re.error(msg % (repr(s), e[0]))
         if not expr.search(bline):
             result.append("%sc%s" % (i+1, i+1))
             result.append('< ' + repr(a[i]))
@@ -533,11 +533,11 @@ if sys.platform == 'win32':
         if path is None:
             path = os.environ['PATH']
         if is_String(path):
-            path = string.split(path, os.pathsep)
+            path = path.split(os.pathsep)
         if pathext is None:
             pathext = os.environ['PATHEXT']
         if is_String(pathext):
-            pathext = string.split(pathext, os.pathsep)
+            pathext = pathext.split(os.pathsep)
         for ext in pathext:
             if string.lower(ext) == string.lower(file[-len(ext):]):
                 pathext = ['']
@@ -555,8 +555,8 @@ else:
     def where_is(file, path=None, pathext=None):
         if path is None:
             path = os.environ['PATH']
-        if is_String(path):
-            path = string.split(path, os.pathsep)
+        if isinstance(path, str):
+            path = path.split(os.pathsep)
         for dir in path:
             f = os.path.join(dir, file)
             if os.path.isfile(f):
@@ -564,7 +564,7 @@ else:
                     st = os.stat(f)
                 except OSError:
                     continue
-                if stat.S_IMODE(st[stat.ST_MODE]) & 0111:
+                if stat.S_IMODE(st[stat.ST_MODE]) & 0o111:
                     return f
         return None
 
@@ -677,7 +677,7 @@ except ImportError:
 
 PIPE = subprocess.PIPE
 
-if subprocess.mswindows:
+if os.name == "nt":
     from win32file import ReadFile, WriteFile
     from win32pipe import PeekNamedPipe
     import msvcrt
@@ -712,7 +712,7 @@ class Popen(subprocess.Popen):
         getattr(self, which).close()
         setattr(self, which, None)
 
-    if subprocess.mswindows:
+    if sys.platform == 'win32':
         def send(self, input):
             if not self.stdin:
                 return None
@@ -722,7 +722,7 @@ class Popen(subprocess.Popen):
                 (errCode, written) = WriteFile(x, input)
             except ValueError:
                 return self._close('stdin')
-            except (subprocess.pywintypes.error, Exception), why:
+            except (subprocess.pywintypes.error, Exception) as why:
                 if why[0] in (109, errno.ESHUTDOWN):
                     return self._close('stdin')
                 raise
@@ -743,7 +743,7 @@ class Popen(subprocess.Popen):
                     (errCode, read) = ReadFile(x, nAvail, None)
             except ValueError:
                 return self._close(which)
-            except (subprocess.pywintypes.error, Exception), why:
+            except (subprocess.pywintypes.error, Exception) as why:
                 if why[0] in (109, errno.ESHUTDOWN):
                     return self._close(which)
                 raise
@@ -762,7 +762,7 @@ class Popen(subprocess.Popen):
 
             try:
                 written = os.write(self.stdin.fileno(), input)
-            except OSError, why:
+            except OSError as why:
                 if why[0] == errno.EPIPE: #broken pipe
                     return self._close('stdin')
                 raise
@@ -1126,7 +1126,7 @@ class TestCmd(object):
         """
         file = self.canonicalize(file)
         if mode[0] != 'r':
-            raise ValueError, "mode must begin with 'r'"
+            raise ValueError("mode must begin with 'r'")
         with open(file, mode) as f:
             result = f.read()
         return result
@@ -1508,12 +1508,12 @@ class TestCmd(object):
                 def do_chmod(fname):
                     try: st = os.stat(fname)
                     except OSError: pass
-                    else: os.chmod(fname, stat.S_IMODE(st[stat.ST_MODE]|0200))
+                    else: os.chmod(fname, stat.S_IMODE(st[stat.ST_MODE]|0o200))
             else:
                 def do_chmod(fname):
                     try: st = os.stat(fname)
                     except OSError: pass
-                    else: os.chmod(fname, stat.S_IMODE(st[stat.ST_MODE]&~0200))
+                    else: os.chmod(fname, stat.S_IMODE(st[stat.ST_MODE]&~0o200))
 
         if os.path.isfile(top):
             do_chmod(top)
@@ -1586,7 +1586,7 @@ class TestCmd(object):
         """
         file = self.canonicalize(file)
         if mode[0] != 'w':
-            raise ValueError, "mode must begin with 'w'"
+            raise ValueError("mode must begin with 'w'")
         with open(file, mode) as f:
             f.write(content)
 
