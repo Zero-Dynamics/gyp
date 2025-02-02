@@ -233,7 +233,7 @@ class MacTool(object):
     _, err = libtoolout.communicate()
     for line in err.splitlines():
       if not libtool_re.match(line) and not libtool_re5.match(line):
-        print >>sys.stderr, line
+        >>sys.stderr, line
     # Unconditionally touch any file .a file on the command line if present if
     # succeeded. A bit hacky.
     if not libtoolout.returncode:
@@ -431,7 +431,7 @@ class MacTool(object):
     profiles_dir = os.path.join(
         os.environ['HOME'], 'Library', 'MobileDevice', 'Provisioning Profiles')
     if not os.path.isdir(profiles_dir):
-      print >>sys.stderr, (
+      >>sys.stderr, (
           'cannot find mobile provisioning for %s' % bundle_identifier)
       sys.exit(1)
     provisioning_profiles = None
@@ -453,7 +453,7 @@ class MacTool(object):
           valid_provisioning_profiles[app_id_pattern] = (
               profile_path, profile_data, team_identifier)
     if not valid_provisioning_profiles:
-      print >>sys.stderr, (
+      >>sys.stderr, (
           'cannot find mobile provisioning for %s' % bundle_identifier)
       sys.exit(1)
     # If the user has multiple provisioning profiles installed that can be

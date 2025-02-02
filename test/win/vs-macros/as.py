@@ -12,7 +12,6 @@ parser.add_option('-o', dest='output')
 parser.add_option('-p', dest='path')
 (options, args) = parser.parse_args()
 
-f = open(options.output, 'w')
-print >>f, 'options', options
-print >>f, 'args', args
-f.close()
+with open(options.output, 'w') as f:
+    print('options', options, file=f)
+    print('args', args, file=f)

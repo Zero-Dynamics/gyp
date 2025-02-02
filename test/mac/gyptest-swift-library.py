@@ -23,7 +23,7 @@ if sys.platform == 'darwin':
     output = subprocess.check_output(['nm', '-j', path])
     idx = output.find(symbol)
     if idx == -1:
-      print 'Swift: Could not find symobl: %s' % symbol
+      print('Swift: Could not find symobl: %s' % symbol)
       test.fail_test()
 
   test_cases = []

@@ -33,8 +33,8 @@ def CheckImageAndPdb(test, image_basename, expected_page_size,
   pdb_file.seek(32, 0)
   page_size = struct.unpack('<I', pdb_file.read(4))[0]
   if page_size != expected_page_size:
-    print "Expected page size of %d, got %d for PDB file `%s'." % (
-        expected_page_size, page_size, pdb_path)
+    print("Expected page size of %d, got %d for PDB file `%s'." % (
+        expected_page_size, page_size, pdb_path))
 
 
 if sys.platform == 'win32':

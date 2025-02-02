@@ -225,12 +225,9 @@ def RegenerateFlags(options):
           (action == 'store_false' and not value)):
         flags.append(opt)
       elif options.use_environment and env_name:
-        print >>sys.stderr, ('Warning: environment regeneration unimplemented '
-                             'for %s flag %r env_name %r' % (action, opt,
-                                                             env_name))
+        print('Warning: environment regeneration unimplemented for %s flag %r env_name %r' % (action, opt, env_name), file=sys.stderr)
     else:
-      print >>sys.stderr, ('Warning: regeneration unimplemented for action %r '
-                           'flag %r' % (action, opt))
+      print('Warning: regeneration unimplemented for action %r flag %r' % (action, opt), file=sys.stderr)
 
   return flags
 

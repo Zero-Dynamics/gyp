@@ -41,9 +41,9 @@
       'type': 'none',
       'variables': {
         'var1': '<!(["python", "-c", "<(pi)"])',
-        'var2': '<!(python -c "print \'<!(python -c "<(pi)") <(letters_list)\'")',
-        'var3': '<!(python -c "print \'<(letters_list)\'")',
-        'var4': '<(<!(python -c "print \'letters_list\'"))',
+        'var2': '<!(python3 -c "print(\'<!(python -c \'<(pi)\') <(letters_list)\')")',
+        'var3': '<!(python3 -c "print(\'< (letters_list)\')")',
+        'var4': '<!(python3 -c "print(\'letters_list\')")',
         'var5': 'letters_',
         'var6': 'list',
         'var7': '<(check_int)',
@@ -61,9 +61,9 @@
         # A second set with different names to make sure they only execute the
         # commands once.
         'var1prime': '<!(["python", "-c", "<(pi)"])',
-        'var2prime': '<!(python -c "print \'<!(python -c "<(pi)") <(letters_list)\'")',
-        'var3prime': '<!(python -c "print \'<(letters_list)\'")',
-        'var4prime': '<(<!(python -c "print \'letters_list\'"))',
+        'var2prime': '<!(python3 -c "print(\'<!(python -c \'<(pi)\') <(letters_list)\')")',
+        'var3prime': '<!(python3 -c "print(\'< (letters_list)\')")',
+        'var4prime': '<!(python3 -c "print(\'letters_list\')")',
       },
       'actions': [
         {

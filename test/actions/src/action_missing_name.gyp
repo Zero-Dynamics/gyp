@@ -15,7 +15,7 @@
           'action': [
             'python',
             '-c',
-            'print \'missing name\'',
+            'print("missing name")',
           ],
         },
       ],

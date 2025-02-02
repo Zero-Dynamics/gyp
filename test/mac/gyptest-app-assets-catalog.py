@@ -19,7 +19,7 @@ import sys
 
 def ExpectEq(expected, actual):
   if expected != actual:
-    print >>sys.stderr, 'Expected "%s", got "%s"' % (expected, actual)
+    print('Expected "%s", got "%s"' % (expected, actual), file=sys.stderr)
     test.fail_test()
 
 def ls(path):

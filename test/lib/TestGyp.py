@@ -261,13 +261,13 @@ class TestGypBase(TestCommon.TestCommon):
     that expect exact output from the command (make) can
     just set stdout= when they call the run_build() method.
     """
-    print "Build is not up-to-date:"
-    print self.banner('STDOUT ')
-    print self.stdout()
+    print("Build is not up-to-date:")
+    print(self.banner('STDOUT '))
+    print(self.stdout())
     stderr = self.stderr()
     if stderr:
-      print self.banner('STDERR ')
-      print stderr
+      print(self.banner('STDERR '))
+      print(stderr)
 
   def run_gyp(self, gyp_file, *args, **kw):
     """
@@ -549,13 +549,13 @@ class TestGypAndroid(TestGypBase):
       stdout: The standard output.
       stderr: The standard error.
     """
-    print '%s failed%s' % (' '.join(command), ': %s' % msg if msg else '')
-    print self.banner('STDOUT ')
+    print('%s failed%s' % (' '.join(command), ': %s' % msg if msg else ''))
+    print(self.banner('STDOUT '))
     stdout.seek(0)
-    print stdout.read()
-    print self.banner('STDERR ')
+    print(stdout.read())
+    print(self.banner('STDERR '))
     stderr.seek(0)
-    print stderr.read()
+    print(stderr.read())
     self.fail_test()
 
   def _call_adb(self, command, timeout=15, retry=3):
@@ -590,8 +590,8 @@ class TestGypAndroid(TestGypBase):
             time.sleep(1)
             timed_out = time.time() > deadline
           if timed_out:
-            print 'Timeout for command %s (attempt %d of %s)' % (
-                adb_command, attempt, retry)
+            print('Timeout for command %s (attempt %d of %s)' % (
+                adb_command, attempt, retry))
             try:
               proc.kill()
             except:
@@ -803,7 +803,7 @@ class TestGypMake(TestGypBase):
     # Makefile.gyp_filename), so use that if there is no Makefile.
     chdir = kw.get('chdir', '')
     if not os.path.exists(os.path.join(chdir, 'Makefile')):
-      print "NO Makefile in " + os.path.join(chdir, 'Makefile')
+      print("NO Makefile in " + os.path.join(chdir, 'Makefile'))
       arguments.insert(0, '-f')
       arguments.insert(1, os.path.splitext(gyp_file)[0] + '.Makefile')
     kw['arguments'] = arguments
@@ -893,7 +893,7 @@ def FindMSBuildInstallation(msvs_version = 'auto'):
 
   msbuild_basekey = r'HKLM\SOFTWARE\Microsoft\MSBuild\ToolsVersions'
   if not registry.KeyExists(msbuild_basekey):
-    print 'Error: could not find MSBuild base registry entry'
+    print('Error: could not find MSBuild base registry entry')
     return None
 
   msbuild_version = None
@@ -902,7 +902,7 @@ def FindMSBuildInstallation(msvs_version = 'auto'):
     if registry.KeyExists(msbuild_basekey + '\\' + msbuild_test_version):
       msbuild_version = msbuild_test_version
     else:
-      print ('Warning: Environment variable GYP_MSVS_VERSION specifies "%s" '
+      print('Warning: Environment variable GYP_MSVS_VERSION specifies "%s" '
              'but corresponding MSBuild "%s" was not found.' %
              (msvs_version, msbuild_version))
   if not msbuild_version:
@@ -912,13 +912,13 @@ def FindMSBuildInstallation(msvs_version = 'auto'):
         msbuild_version = msbuild_test_version
         break
   if not msbuild_version:
-    print 'Error: could not find MSBuild registry entry'
+    print('Error: could not find MSBuild registry entry')
     return None
 
   msbuild_path = registry.GetValue(msbuild_basekey + '\\' + msbuild_version,
                                    'MSBuildToolsPath')
   if not msbuild_path:
-    print 'Error: could not get MSBuild registry entry value'
+    print('Error: could not get MSBuild registry entry value')
     return None
 
   return os.path.join(msbuild_path, 'MSBuild.exe')
@@ -959,7 +959,7 @@ def FindVisualStudioInstallation():
         msbuild_path = FindMSBuildInstallation(msvs_version)
         return build_tool, uses_msbuild, msbuild_path
     else:
-      print ('Warning: Environment variable GYP_MSVS_VERSION specifies "%s" '
+      print('Warning: Environment variable GYP_MSVS_VERSION specifies "%s" '
               'but corresponding "%s" was not found.' % (msvs_version, path))
   # Neither GYP_MSVS_VERSION nor the path help us out.  Iterate through
   # the choices looking for a match.
@@ -971,7 +971,7 @@ def FindVisualStudioInstallation():
         uses_msbuild = msvs_version >= '2010'
         msbuild_path = FindMSBuildInstallation(msvs_version)
         return build_tool, uses_msbuild, msbuild_path
-  print 'Error: could not find devenv'
+  print('Error: could not find devenv')
   sys.exit(1)
 
 class TestGypOnMSToolchain(TestGypBase):

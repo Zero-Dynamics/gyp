@@ -508,8 +508,8 @@ def CallLoadTargetBuildFile(global_flags,
     sys.stderr.write("gyp: %s\n" % e)
     return None
   except Exception as e:
-    print >>sys.stderr, 'Exception:', e
-    print >>sys.stderr, traceback.format_exc()
+    print('Exception:', e, file=sys.stderr)
+    print(traceback.format_exc(), file=sys.stderr)
     return None
 
 
