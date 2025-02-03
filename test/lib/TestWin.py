@@ -83,6 +83,9 @@ class Registry(object):
     if not text:
       return None
     # Extract value.
+    if isinstance(text, bytes):
+        text = text.decode('utf-8')
+
     match = re.search(r'REG_\w+\s+([^\r]+)\r\n', text)
     if not match:
       return None

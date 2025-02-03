@@ -215,7 +215,7 @@ class TestCommon(TestCmd):
         calling the base class initialization, and then changing directory
         to the workdir.
         """
-        apply(TestCmd.__init__, [self], kw)
+        TestCmd.__init__(self, **kw)
         os.chdir(self.workdir)
 
     def must_be_writable(self, *files):
@@ -225,7 +225,7 @@ class TestCommon(TestCmd):
         them.  Exits FAILED if any of the files does not exist or is
         not writable.
         """
-        files = map(lambda x: is_List(x) and apply(os.path.join, x) or x, files)
+        files = map(lambda x: os.path.join(*x) if is_List(x) else x, files)
         existing, missing = separate_files(files)
         unwritable = filter(lambda x, iw=is_writable: not iw(x), existing)
         if missing:
@@ -311,7 +311,7 @@ class TestCommon(TestCmd):
         pathname will be constructed by concatenating them.  Exits FAILED
         if any of the files does not exist.
         """
-        files = map(lambda x: is_List(x) and apply(os.path.join, x) or x, files)
+        files = map(lambda x: os.path.join(*x) if is_List(x) else x, files)
         missing = filter(lambda x: not os.path.exists(x), files)
         if missing:
             print("Missing files: `%s'" % string.join(missing, "', `"))
@@ -383,7 +383,7 @@ class TestCommon(TestCmd):
         which case the pathname will be constructed by concatenating them.
         Exits FAILED if any of the files exists.
         """
-        files = map(lambda x: is_List(x) and apply(os.path.join, x) or x, files)
+        files = map(lambda x: os.path.join(*x) if is_List(x) else x, files)
         existing = filter(os.path.exists, files)
         if existing:
             print("Unexpected files exist: `%s'" % string.join(existing, "', `"))
@@ -396,7 +396,7 @@ class TestCommon(TestCmd):
         them.  Exits FAILED if any of the files does not exist or is
         writable.
         """
-        files = map(lambda x: is_List(x) and apply(os.path.join, x) or x, files)
+        files = map(lambda x: os.path.join(*x) if is_List(x) else x, files)
         existing, missing = separate_files(files)
         writable = filter(is_writable, existing)
         if missing:

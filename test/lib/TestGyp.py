@@ -940,7 +940,8 @@ def FindVisualStudioInstallation():
       '2012': r'Microsoft Visual Studio 11.0\Common7\IDE\devenv.com',
       '2010': r'Microsoft Visual Studio 10.0\Common7\IDE\devenv.com',
       '2008': r'Microsoft Visual Studio 9.0\Common7\IDE\devenv.com',
-      '2005': r'Microsoft Visual Studio 8\Common7\IDE\devenv.com'}
+      '2005': r'Microsoft Visual Studio 8\Common7\IDE\devenv.com',
+      '2022': r'Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.com'}
 
   possible_roots = [ConvertToCygpath(r) for r in possible_roots]
 

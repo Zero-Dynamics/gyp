@@ -539,7 +539,7 @@ if sys.platform == 'win32':
         if is_String(pathext):
             pathext = pathext.split(os.pathsep)
         for ext in pathext:
-            if string.lower(ext) == string.lower(file[-len(ext):]):
+            if str(ext).lower() == str(file[-len(ext):]).lower():
                 pathext = ['']
                 break
         for dir in path:
@@ -882,7 +882,7 @@ class TestCmd(object):
                 #self.diff_function = difflib.unified_diff
         self._dirlist = []
         self._preserve = {'pass_test': 0, 'fail_test': 0, 'no_result': 0}
-        if os.environ.has_key('PRESERVE') and not os.environ['PRESERVE'] is '':
+        if 'PRESERVE' in os.environ and os.environ['PRESERVE'] != '':
             self._preserve['pass_test'] = os.environ['PRESERVE']
             self._preserve['fail_test'] = os.environ['PRESERVE']
             self._preserve['no_result'] = os.environ['PRESERVE']
@@ -947,7 +947,7 @@ class TestCmd(object):
 
     def canonicalize(self, path):
         if is_List(path):
-            path = apply(os.path.join, tuple(path))
+            path = path = os.path.join(*path)
         if not os.path.isabs(path):
             path = os.path.join(self.workdir, path)
         return path
@@ -1319,7 +1319,7 @@ class TestCmd(object):
             if sub is None:
                 continue
             if is_List(sub):
-                sub = apply(os.path.join, tuple(sub))
+                sub = os.path.join(*sub)
             new = os.path.join(self.workdir, sub)
             try:
                 os.mkdir(new)
@@ -1367,7 +1367,7 @@ class TestCmd(object):
         # letters is pretty much random on win32:
         drive,rest = os.path.splitdrive(path)
         if drive:
-            path = string.upper(drive) + rest
+            path = drive.upper() + rest
 
         #
         self._dirlist.append(path)
@@ -1409,7 +1409,7 @@ class TestCmd(object):
         """Find an executable file.
         """
         if is_List(file):
-            file = apply(os.path.join, tuple(file))
+            file = os.path.join(*file)
         if not os.path.isabs(file):
             file = where_is(file, path, pathext)
         return file
@@ -1431,7 +1431,7 @@ class TestCmd(object):
         the temporary working directory name with the specified
         arguments using the os.path.join() method.
         """
-        return apply(os.path.join, (self.workdir,) + tuple(args))
+        return os.path.join(self.workdir, *args)
 
     def readable(self, top, read=1):
         """Make the specified directory tree readable (read == 1)

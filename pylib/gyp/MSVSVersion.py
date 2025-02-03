@@ -209,6 +209,9 @@ def _RegistryGetValue(key, value):
   if not text:
     return None
   # Extract value.
+  if isinstance(text, bytes):
+      text = text.decode('utf-8')
+
   match = re.search(r'REG_\w+\s+([^\r]+)\r\n', text)
   if not match:
     return None
@@ -345,6 +348,9 @@ def _DetectVisualStudioVersions(versions_to_check, force_express):
       2012(e) - Visual Studio 2012 (11)
       2013(e) - Visual Studio 2013 (12)
       2015    - Visual Studio 2015 (14)
+      2017    - Visual Studio 2017 (15)
+      2019    - Visual Studio 2019 (16)
+      2022    - Visual Studio 2022 (17)
     Where (e) is e for express editions of MSVS and blank otherwise.
   """
   version_to_year = {
